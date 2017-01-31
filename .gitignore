@@ -1,0 +1,6 @@
+# Python3
+__pycache__/
+
+# Eclipse+PyDev
+.project
+.pydevproject
