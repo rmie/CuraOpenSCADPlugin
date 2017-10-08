@@ -3,21 +3,20 @@
 import os
 import tempfile
 
-from UM.Mesh.MeshReader import MeshReader
-from UM.PluginRegistry import PluginRegistry
-from UM.Logger import Logger
-from UM.Message import Message
+from UM.Mesh.MeshReader import MeshReader # @UnresolvedImport
+from UM.PluginRegistry import PluginRegistry # @UnresolvedImport
+from UM.Logger import Logger # @UnresolvedImport
+from UM.Message import Message # @UnresolvedImport
 
-from UM.i18n import i18nCatalog
+from UM.i18n import i18nCatalog # @UnresolvedImport
 i18n_catalog = i18nCatalog("CuraOpenSCADIntegrationPlugin")
 
-from .dotscad import Customizer
+from .dotscad import Customizer # @UnresolvedImport
 
 class OpenSCADReader(MeshReader):
     def __init__(self):
         super(OpenSCADReader, self).__init__()
         self._supported_extensions = [".SCAD".lower(),
-                                      #".CATProduct".lower(),
                                       ]
         self._readerForFileformat = {}
 
