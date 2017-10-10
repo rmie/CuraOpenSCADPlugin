@@ -1,7 +1,7 @@
 {
     "name": "OpenSCAD integration",
     "author": "Thomas Karl Pietrowski",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "api": 4,
     "description": "Help to open OpenSCAD files directly in Cura."
 }
