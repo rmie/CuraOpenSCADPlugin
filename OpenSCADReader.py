@@ -26,14 +26,15 @@ class OpenSCADReader(CommonCLIReader):
 
     def openForeignFile(self, options):
         # We open the file, while converting.. No actual opening of the file needed..
-        #Logger.log("d", "Opening file: %s", options["foreignFile"])
-        #options["scad_file"] = SCAD_handler(options["foreignFile"], debug=False)
+        Logger.log("d", "Opening file: %s", options["foreignFile"])
+        options["scad_file"] = SCAD_handler(options["foreignFile"], debug=False)
         return options
     
     def exportFileAs(self, options):
-        #Logger.log("d", "Exporting file: %s", options["tempFile"])
-        #options["scad_file"].render_stl(dest=options["tempFile"], overwrite=False)
+        Logger.log("d", "Exporting file: %s", options["tempFile"])
+        options["scad_file"].render_stl(dest=options["tempFile"], overwrite=False)
         
+        """
         # Use the appropriate command for the current OS
         if platform.system() == 'Darwin':
             cmd = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
@@ -44,3 +45,4 @@ class OpenSCADReader(CommonCLIReader):
 
         cmd = [cmd, '-o', options["tempFile"], options["foreignFile"]]
         subprocess.call(cmd, cwd=os.path.split(options["foreignFile"])[0])
+        """
