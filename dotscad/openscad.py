@@ -55,12 +55,14 @@ class OpenSCAD(object):
         if self.debug():
             tmp_scad_path = os.path.join(dirname, dest + '.DEBUG.scad')
             # @todo print warning to stderr if tmp_scad_path exists
-            tmp_scad = open(tmp_scad_path, 'w')
+            tmp_scad = open(tmp_scad_path, 'w+b')
             tmp_scad.write(str.encode(self.render()))
             tmp_scad.close()
         else:
             # When not debugging, we'll want a temp file that cleans up after itself
-            tmp_scad = tempfile.NamedTemporaryFile(suffix='.scad', dir=dirname)
+            tmp_scad = tempfile.NamedTemporaryFile(mode = "w+b",
+                                                   suffix = ".scad",
+                                                   dir = dirname)
             tmp_scad.write(str.encode(self.render()))
             tmp_scad.flush()
             tmp_scad_path = tmp_scad.name
@@ -79,7 +81,7 @@ class OpenSCAD(object):
         return True
 
     def _load(self):
-        with open(self.path) as file:
+        with open(self.path, 'r+b') as file:
             self._source = file.read()
 
     def __str__(self):
