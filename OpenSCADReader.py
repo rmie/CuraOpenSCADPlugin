@@ -1,82 +1,46 @@
 # Copyright (c) 2016 Thomas Karl Pietrowski
 
 import os
-import tempfile
+import platform
+import subprocess
 
-from UM.Mesh.MeshReader import MeshReader # @UnresolvedImport
 from UM.PluginRegistry import PluginRegistry # @UnresolvedImport
 from UM.Logger import Logger # @UnresolvedImport
-from UM.Message import Message # @UnresolvedImport
 
 from UM.i18n import i18nCatalog # @UnresolvedImport
 i18n_catalog = i18nCatalog("CuraOpenSCADIntegrationPlugin")
 
-from .dotscad import Customizer # @UnresolvedImport
+from .dotscad import OpenSCAD as SCAD_handler # @UnresolvedImport
 
-class OpenSCADReader(MeshReader):
+from .CadIntegrationUtils.CommonComReader import CommonCLIReader # @UnresolvedImport
+
+class OpenSCADReader(CommonCLIReader):
     def __init__(self):
-        super(OpenSCADReader, self).__init__()
+        super().__init__("OpenSCAD")
         self._supported_extensions = [".SCAD".lower(),
                                       ]
-        self._readerForFileformat = {}
-
-        # Trying 3MF first because it describes the model much better..
-        # However, this is untested since this plugin was only tested with STL support
-        if PluginRegistry.getInstance().isActivePlugin("STLReader"):
-            self._readerForFileformat["stl"] = PluginRegistry.getInstance().getPluginObject("STLReader")
-
-        if not len(self._readerForFileformat):
-            Logger.log("d", "Could not find any reader for (probably) supported file formats!")
-
 
     def areReadersAvailable(self):
         return bool(self._readerForFileformat)
 
-    ## Decide if we need to use ascii or binary in order to read file
-    def read(self, file_name):
-        Logger.log("i", "Trying to convert into: %s" %(self._readerForFileformat.keys()))
-        for fileFormat in self._readerForFileformat.keys():
-            Logger.log("d", "Trying to convert <%s> into  '%s'" %(file_name, fileFormat))
 
-            # Only get a save name for a temp_file here...
-            temp_stl_file = tempfile.NamedTemporaryFile()
-            temp_stl_file_name = "%s.%s" %(temp_stl_file.name, fileFormat)
-            temp_stl_file.close()
+    def openForeignFile(self, options):
+        # We open the file, while converting.. No actual opening of the file needed..
+        #Logger.log("d", "Opening file: %s", options["foreignFile"])
+        #options["scad_file"] = SCAD_handler(options["foreignFile"], debug=False)
+        return options
+    
+    def exportFileAs(self, options):
+        #Logger.log("d", "Exporting file: %s", options["tempFile"])
+        #options["scad_file"].render_stl(dest=options["tempFile"], overwrite=False)
+        
+        # Use the appropriate command for the current OS
+        if platform.system() == 'Darwin':
+            cmd = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+        elif platform.system() == 'Windows':
+            cmd = 'openscad.exe'
+        else:
+            cmd = 'openscad'
 
-            # In case there is already a file with this name (very unlikely...)
-            if os.path.isfile(temp_stl_file_name):
-                Logger.log("w", "Removing already avilable file, called: %s" %(temp_stl_file_name))
-                os.remove(temp_stl_file_names)
-
-            Logger.log("d", "Using temporary file <%s>" %(temp_stl_file_name))
-            try:
-                Logger.log("d", "Opening file with OpenSCAD...")
-                customizableScadFile = Customizer(file_name, debug=False)
-            except Exception:
-                Logger.logException("e", "Failed to convert via OpenSCAD...")
-                error_message = Message(i18n_catalog.i18nc("@info:status", "Error while starting OpenSCAD!"))
-                error_message.show()
-                return None
-
-            try:
-                Logger.log("d", "Rendering and saving as: <%s>" %(temp_stl_file_name))
-                customizableScadFile.render_stl(dest=temp_stl_file_name, overwrite=False)
-            except:
-                Logger.log("e", "Could not render or convert <%s> into '%s'." %(file_name, fileFormat))
-                continue
-
-            Logger.log("d", "Saved as: <%s>" %(temp_stl_file_name))
-
-            # Opening file in Cura
-            try:
-                reader = self._readerForFileformat[fileFormat]
-                scene_node = reader.read(os.path.normpath(temp_stl_file_name))
-            except:
-                Logger.log("e", "Failed to open exported <%s> file in Cura!" %(fileFormat))
-                continue
-
-            # Remove the temp_file again
-            Logger.log("d", "Removing temporary STL file, called <%s>", temp_stl_file_name)
-            os.remove(temp_stl_file_name)
-
-        return scene_node
+        cmd = [cmd, '-o', options["tempFile"], options["foreignFile"]]
+        subprocess.call(cmd, cwd=os.path.split(options["foreignFile"])[0])
