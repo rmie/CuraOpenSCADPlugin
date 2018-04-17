@@ -20,12 +20,17 @@ class OpenSCADReader(CommonCLIReader):
                                       ]
         self.scanForAllPaths()
 
+    def openForeignFile(self, options):
+        options["fileFormats"].append("stl")
+
+        return super().openForeignFile(options)
+
     def areReadersAvailable(self):
         return bool(self._readerForFileformat)
 
     def exportFileAs(self, options, quality_enum = None):
         Logger.log("d", "Exporting file: %s", options["tempFile"])
-        
+
         # Use the appropriate command for the current OS
         if platform.system() == 'Darwin':
             cmd = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
