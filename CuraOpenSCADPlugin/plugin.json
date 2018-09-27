@@ -3,7 +3,7 @@
     "id" : "CuraOpenSCADPlugin",
     "author": "Thomas Karl Pietrowski",
     "email" : "thopiekar@gmail.com",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "website": "https://thopiekar.eu/cura/plugins/cad/openscad/",
     "api": 5,
     "description": "Help to open OpenSCAD files directly in Cura.",
