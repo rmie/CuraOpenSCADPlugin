@@ -5,7 +5,7 @@
     "email" : "thopiekar@gmail.com",
     "version": "0.1.1",
     "website": "https://thopiekar.eu/cura/plugins/cad/openscad/",
-    "api": 4,
+    "api": 5,
     "description": "Help to open OpenSCAD files directly in Cura.",
     "i18n-catalog" : "OpenSCADPlugin"
 }
