@@ -1,16 +1,16 @@
 # Copyright (c) 2016 Thomas Karl Pietrowski
 
 # built-ins
-import distutils.version.LooseVersion
 import os
 import platform
 
 # Uranium
 from UM.Logger import Logger # @UnresolvedImport
 from UM.i18n import i18nCatalog # @UnresolvedImport
+from UM.Version import Version # @UnresolvedImport
 
 # Since 3.4: Register Mimetypes:
-if distutils.version.LooseVersion("3.4") <= distutils.version.LooseVersion(Application.getInstance().getVersion()):
+if Version("3.4") <= Version(Application.getInstance().getVersion()):
     from UM.MimeTypeDatabase import MimeTypeDatabase, MimeType
 
 # CIU
@@ -22,7 +22,7 @@ class OpenSCADReader(CommonCLIReader):
     def __init__(self):
         super().__init__("OpenSCAD")
 
-        if distutils.version.LooseVersion("3.4") <= distutils.version.LooseVersion(Application.getInstance().getVersion()):
+        if Version("3.4") <= Version(Application.getInstance().getVersion()):
             MimeTypeDatabase.addMimeType(MimeType(name = "application/x-extension-scad",
                                                   comment="OpenSCAD files",
                                                   suffixes=["scad"]
