@@ -4,7 +4,7 @@
 
 # Workflow
 
-Inteded workflow is to export all required OpenSCAD objects (meshes) as individual geometries, as below.
+Inteded workflow is to export all required OpenSCAD objects (meshes) as individual geometries, by adding comments to your OpenSCAD file, as below.
 
 ```
 /*cura-export 'baseplate()' AS Baseplate */
@@ -13,9 +13,9 @@ Inteded workflow is to export all required OpenSCAD objects (meshes) as individu
 /*cura-export 'support()' AS Support */
 ```
 
-This will place four objects on the build plate. After defining 'Per Model Settings' for each of them, use 'Select All Models', 'Reset All Model Positions' and 'Group Models' to transform them into a single part.
+Opening the OpenSCAD file with Cura places four objects on the build plate. After defining 'Per Model Settings' for each of them, use 'Select All Models', 'Reset All Model Positions' and 'Group Models' to transform them into a single printable object.
 
-Printing or saving the generated GCode will cause Cura to write all changes back to the OpenSCAD file like below. The difference here is that this is only a single Part made from four meshes with specific settings per mesh.
+Printing or saving the generated GCode will cause Cura to write all changes back to the OpenSCAD file like below. The difference here is that this is only a single printable object made from four meshes with specific settings per mesh.
 
 ```
 /* cura-export
